@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title></title>
+            </titleStmt>
+            <publicationStmt>
+                <p/>
+            </publicationStmt>
+            <sourceDesc>
+                <p/>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="original">
+                <ab>私の名前は<persName corresp="#id1">田中太郎</persName>です。</ab>
+            </div>
+            <div>
+                <p style="color: green;">こんにちは</p>
+                <p style="color: green;">こんばんは <seg style="color: blue;">xxx</seg>
+                </p>
+            </div>
+        </body>
+    </text>
+</TEI>
