@@ -70,8 +70,15 @@ export default function Simple() {
     <div
       id="tei-container"
       style={{
+        width: "100%",
         writingMode: "vertical-rl",
         height: "calc(100vh - 128px)",
+        overflowX: "auto",
+        overflowY: "hidden" as const,
+      }}
+      onWheel={(e) => {
+        e.preventDefault();
+        e.currentTarget.scrollLeft += e.deltaY;
       }}
     ></div>
   );

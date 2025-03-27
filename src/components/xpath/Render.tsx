@@ -2,11 +2,7 @@
 
 import React from "react";
 import CETEI from "CETEIcean";
-import { TEIRender, TEIRoute } from "react-teirouter";
-import { Div } from "@/components/tei/element/div";
-import { PersName } from "@/components/tei/element/persname";
-import { P } from "@/components/tei/element/p";
-import { Seg } from "@/components/tei/element/seg";
+import { TEIRoute, TEIRender } from "react-teirouter";
 
 const Facsimile = () => {
   return null;
@@ -14,6 +10,7 @@ const Facsimile = () => {
 
 export default function Render({ xmlContent }: { xmlContent: string }) {
   const [teiDoc, setTeiDoc] = React.useState<Document | null>(null);
+  const teiContentRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -28,12 +25,39 @@ export default function Render({ xmlContent }: { xmlContent: string }) {
     fetchData();
   }, [xmlContent]);
 
+  // fetchDataの修正
+  React.useEffect(() => {
+    const rawXpath = "/TEI/text[1]/body[1]/p[1]/seg[267]";
+
+    const xpath = rawXpath
+      .replace(/^\//, "") // 先頭のスラッシュを削除
+      .replace(/([A-Za-z]+)(?=\/|\[|$)/g, "tei-$1") // tei-プレフィックスを追加
+      .toLowerCase();
+
+    if (teiContentRef.current) {
+      const result = document.evaluate(
+        xpath,
+        teiContentRef.current,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null
+      );
+
+      const targetElement = result.singleNodeValue as HTMLElement;
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: "smooth" });
+        targetElement.style.backgroundColor = "yellow";
+      }
+    }
+  }, [teiDoc]);
+
   if (teiDoc) {
-    const teiElement = teiDoc.querySelector("tei-tei");
+    const teiElement = teiDoc.querySelector("tei-tei") as HTMLElement;
     if (teiElement) {
       return (
         <div
           className=""
+          ref={teiContentRef}
           style={{
             width: "100%",
             writingMode: "vertical-rl",
@@ -42,16 +66,11 @@ export default function Render({ xmlContent }: { xmlContent: string }) {
             overflowY: "hidden" as const,
           }}
           onWheel={(e) => {
-            e.preventDefault();
             e.currentTarget.scrollLeft += e.deltaY;
           }}
         >
           <TEIRender data={teiElement}>
             <TEIRoute el="tei-facsimile" component={Facsimile} />
-            <TEIRoute el="tei-div" component={Div} />
-            <TEIRoute el="tei-p" component={P} />
-            <TEIRoute el="tei-persname" component={PersName} />
-            <TEIRoute el="tei-seg" component={Seg} />
           </TEIRender>
         </div>
       );
