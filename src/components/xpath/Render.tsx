@@ -45,7 +45,11 @@ export default function Render({ xmlContent }: { xmlContent: string }) {
 
       const targetElement = result.singleNodeValue as HTMLElement;
       if (targetElement) {
-        targetElement.scrollIntoView({ behavior: "smooth" });
+        targetElement.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "center",
+        });
         targetElement.style.backgroundColor = "yellow";
       }
     }
